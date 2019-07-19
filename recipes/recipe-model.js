@@ -6,19 +6,21 @@ module.exports = {
   getInstructions
 };
 
-async function getRecipes() {
-  return await db('recipes');
+function getRecipes() {
+  console.log('fetching recipes');
+  return db('recipes');
 }
 
-async function getShoppingList(recipe_id) {
-  return await db('recipes')
-    .innerJoin('ingredients_needed as in', 'recipes.id', 'in.id')
+function getShoppingList(recipe_id) {
+  return db('recipes')
+    .innerJoin('ingredients_needed as in', 'recipes.id', 'in.recipe_id')
+    .innerJoin('ingredients as i', 'in.ingredient_id', 'i.id')
     .where({ 'recipes.id': recipe_id })
-    .select('in.name', 'in.quantity', 'in.measurement');
+    .select('i.name', 'in.quantity', 'in.measurement');
 }
 
-async function getInstructions(recipe_id) {
-  return await db('recipes')
+function getInstructions(recipe_id) {
+  return db('recipes')
     .innerJoin('recipe_directions as rd', 'recipes.id', 'rd.id')
     .where({ 'recipes.id': recipe_id })
     .select('rd.step_number', 'rd.instructions');
