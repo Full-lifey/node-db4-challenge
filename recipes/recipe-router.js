@@ -22,4 +22,13 @@ router.get('/:id/shoppinglist', async (req, res) => {
   }
 });
 
+router.get('/:id/instructions', async (req, res) => {
+  try {
+    const instructions = await Recipes.getInstructions(req.params.id);
+    res.json(instructions);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 module.exports = router;
