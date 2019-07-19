@@ -16,3 +16,10 @@ async function getShoppingList(recipe_id) {
     .where({ 'recipes.id': recipe_id })
     .select('in.name', 'in.quantity', 'in.measurement');
 }
+
+async function getInstructions(recipe_id) {
+  return await db('recipes')
+    .innerJoin('recipe_directions as rd', 'recipes.id', 'rd.id')
+    .where({ 'recipes.id': recipe_id })
+    .select('rd.step_number', 'rd.instructions');
+}
